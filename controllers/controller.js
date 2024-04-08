@@ -9,15 +9,7 @@ para isso, implementar variavel globar com o total de cadastros feitos.
 const lista = require('../my_list.js')
 const controller = {}
 
-function idGeneretor(lista) {
-    let maior_id = 0
-    for (let i = 0; i < lista.length; i++) {
-        if (lista[i].id > maior_id) {
-            maior_id = lista[i].id
-        }
-    }
-    return Number(maior_id) + 1
-}
+var maior_id = lista.length
 
 controller.pessoas = function(req, res) {
     // res.sendFile('C:\\Users\\rlvsa\\OneDrive\\Área de Trabalho\\lista3\\my_list.js')
@@ -38,10 +30,11 @@ controller.pessoa_id = function(req, res) {
     }
 }
 controller.create = (req, res) => {
-    let pessoa = {id:idGeneretor(lista)} // Fatorar. Se o tamanho da lista for menor que o id do último elemento, poderá gerar id duplicado
+    let pessoa = {id: maior_id + 1} // Fatorar. Se o tamanho da lista for menor que o id do último elemento, poderá gerar id duplicado
     pessoa = {...pessoa, ...req.body}
     pessoa.idade = Number(pessoa.idade)
     lista.push(pessoa)
+    maior_id ++
     res.status(200).send(`Pessoa cadastrada com id:\n${pessoa.id}`)
 }
 controller.update = function(request, response) {
