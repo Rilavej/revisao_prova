@@ -1,7 +1,5 @@
 /*
-criar função para método push para cadastrar nova pessoa com id baseado no numero total de pessoas que já
-foram cadastradas (incluindo excluidas).
-para isso, implementar variavel globar com o total de cadastros feitos.
+Implementar métodos HTTP para GET, PUT, DELETE enviando dados no corpo da requisição
 */
 
 
