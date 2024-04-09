@@ -10,6 +10,7 @@ router.delete('/pessoas/:id', controller.delete)
 
 //Rotas que usam o corpo da requisição
 router.put('/pessoas', controller.atualizar)
+router.delete('/pessoas', controller.deletar)
 
 module.exports = router
 

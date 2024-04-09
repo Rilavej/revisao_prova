@@ -1,5 +1,5 @@
 /*
-Implementar métodos HTTP para GET, PUT, DELETE enviando dados no corpo da requisição
+Implementado métodos HTTP PUT e DELETE enviando dados pelo corpo da requisição ao invés de usar parametros na URL.
 */
 
 
@@ -24,16 +24,18 @@ controller.pessoa_id = function(req, res) {
         res.status(200).send(pessoa)
     }
     else {
-        res.status(404).send('<h1>id inválido</h1>')
+        res.status(404).send('<h1>ID inválido</h1>')
     }
 }
-controller.create = (req, res) => {
-    let pessoa = {id: maior_id + 1} // Fatorar. Se o tamanho da lista for menor que o id do último elemento, poderá gerar id duplicado
-    pessoa = {...pessoa, ...req.body}
-    pessoa.idade = Number(pessoa.idade)
-    lista.push(pessoa)
-    maior_id ++
-    res.status(200).send(`Pessoa cadastrada com id:\n${pessoa.id}`)
+// Resolvido!!! // Fatorar. Se o tamanho da lista for menor que o id do último elemento, poderá gerar id duplicado
+controller.create = (req, res) => { 
+    let pessoa = {id: undefined} // Cria um objeto com com um unico atributo (id)
+    pessoa = {...pessoa, ...req.body} // Mescla o objeto pessoa com o objeto req.body enviado no corpo na requisição
+    pessoa.idade = Number(pessoa.idade) 
+    maior_id ++ // Incrementa a variavél global que é responsável fazer cada id único
+    pessoa.id = maior_id // Atualiza o id do novo cadastro. Estando nesta linha tambem garante que qualquer id passado equivocadamente no corpo da requisição seja sobrescrito pelo id correto.  
+    lista.push(pessoa) // Atualiza a lista de objetos
+    res.status(200).send(`Pessoa cadastrada com ID:\n${pessoa.id}`)
 }
 controller.update = function(request, response) {
     let updateStatus
@@ -52,7 +54,7 @@ controller.update = function(request, response) {
         response.status(200).send(lista)
     }
     else {
-        response.status(404).send(`pessoa com id ${request.params.id} não encontrada para atualizar!`)
+        response.status(404).send(`pessoa com ID ${request.params.id} não encontrada para atualizar!`)
     }
 }
 controller.delete = (req, res) => {
@@ -69,7 +71,7 @@ controller.delete = (req, res) => {
         res.status(200).send(lista)
     }
     else {
-        res.status(404).send(`pessoa com id ${req.params.id} não encontrada para deletar!`)
+        res.status(404).send(`pessoa com ID ${req.params.id} não encontrada na base para deletar!`)
     }
 }
 controller.atualizar = (req,res) => {
@@ -87,5 +89,19 @@ controller.atualizar = (req,res) => {
         res.status(404).send(`ID ${req.body.id} não consta na base!`)
     }
 
+}
+controller.deletar = function (req, res) {
+    let status
+    for (let i = 0; i < lista.length; i++) {
+        if (lista[i].id == req.body.id) {
+            let excluido = lista[i].nome
+            lista.splice(i, 1)
+            res.status(200).send(`<h1>${excluido} foi excluído(a) da base!<h1/>`)
+            status = true
+        }
+    }
+    if (status != true) {
+        res.status(404).send(`Pessoa com ID ${req.body.id} não encontrada!`)
+    }
 }
 module.exports = controller
