@@ -44,6 +44,7 @@ controller.update = function(request, response) {
             let objetoId = {"id":Number(request.params.id)}
             newPerson = {...objetoId, ...newPerson}
             lista[i] = newPerson
+            lista[i].id = Number(request.params.id) // Refatorar. Resolve comflito com PUT via corpo da requisição
             updateStatus = true
         }
     }
@@ -70,5 +71,21 @@ controller.delete = (req, res) => {
     else {
         res.status(404).send(`pessoa com id ${req.params.id} não encontrada para deletar!`)
     }
+}
+controller.atualizar = (req,res) => {
+    let status
+    for (let i = 0; i < lista.length; i++) {
+        if (lista[i].id == req.body.id) {
+            req.body.id = Number(req.body.id)
+            req.body.idade = Number(req.body.idade)
+            lista[i] = req.body
+            res.status(200).send(`Cadastro atualizado: \n\n${lista[i]}`)
+            status = true
+        }
+    }
+    if (status != true) {
+        res.status(404).send(`ID ${req.body.id} não consta na base!`)
+    }
+
 }
 module.exports = controller

@@ -8,6 +8,9 @@ router.post('/pessoas', controller.create)
 router.put('/pessoas/:id', controller.update)
 router.delete('/pessoas/:id', controller.delete)
 
+//Rotas que usam o corpo da requisição
+router.put('/pessoas', controller.atualizar)
+
 module.exports = router
 
 // GET /pessoas
